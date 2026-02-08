@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Event Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Smart Event Dashboard</h1>
+    <div id="amin-event-add-container">
+        <h2>Add New Event</h2>
+        <form id="event-form">
+            <label for="eventtitle">Event title</label>
+            <input type="text" id="eventtitle" required>
+
+            <label for="eventdate">Event date : </label>
+            <input type="date" id="eventdate" required>
+
+            <label for="eventcategory">Category : </label>
+            <select id="eventcategory">
+                <option value="conference">conference</option>
+                <option value="workshop">workshop</option>
+                <option value="meetup">meetup</option>
+                <option value="webinar">webinar</option>
+                <option value="social">social</option>
+            </select>
+
+            <label for="description">Description : </label>
+            <textarea id="description"></textarea>
+
+            <button type="submit">Add Event</button>
+        </form>
+
+        <div class="events-display-area">
+            <h2>My Events</h2>
+            <div style="display: flex; gap: 10px;">
+                <button id="clear-events-btn">Clear all events</button>
+                <button id="add-sample-events-btn">Add Sample Events</button>
+            </div>
+            <div id="all-events-container">no events yet.</div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.querySelector('#event-form');
+        const allEventsContainer = document.querySelector('#all-events-container');
+        const clearEventsBtn = document.querySelector('#clear-events-btn');
+        const addSampleEventsBtn = document.querySelector('#add-sample-events-btn');
+
+        function addeventfunction(event) {
+            event.preventDefault();
+
+            // 1. Get current values
+            const title = document.querySelector('#eventtitle').value;
+            const date = document.querySelector('#eventdate').value;
+            const category = document.querySelector('#eventcategory').value;
+            const desc = document.querySelector('#description').value;
+
+            // 2. If this is the first event, clear the "no events yet" text
+            if (allEventsContainer.innerHTML.includes('no events yet.')) {
+                allEventsContainer.innerHTML = '';
+            }
+
+            // 3. Create the event card
+            let card = document.createElement('div');
+            card.className = 'event-card'; // Added a class for styling
+            card.innerHTML = `
+            <h4>${title}</h4>
+            <small>📅 ${date}</small><br>
+            <span class="category-badge">${category}</span>
+            <p style="font-size: 0.9rem; color: #636e72;">${desc}</p>
+        `;
+            
+
+            // 4. APPEND the card (don't overwrite the container)
+            allEventsContainer.appendChild(card);
+
+            // 5. Reset the form
+            form.reset();
+        }
+        addSampleEventsBtn.addEventListener('click', function() {
+                document.querySelector('#eventtitle').value = 'Sample Event';
+                document.querySelector('#eventdate').value = '2024-06-30';
+                document.querySelector('#eventcategory').value = 'conference';
+                document.querySelector('#description').value = 'This is a sample event description.';
+            });
+
+        // Move the Clear button logic OUTSIDE the submit function
+        clearEventsBtn.addEventListener('click', function() {
+            allEventsContainer.innerHTML = 'no events yet.';
+        });
+
+        form.addEventListener('submit', addeventfunction);
+    </script>
+</body>
+</html>
